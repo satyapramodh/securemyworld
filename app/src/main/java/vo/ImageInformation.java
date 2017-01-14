@@ -5,19 +5,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 
-import com.microsoft.projectoxford.emotion.contract.RecognizeResult;
-import com.microsoft.projectoxford.vision.contract.Category;
-import com.microsoft.projectoxford.vision.contract.Face;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by akhil on 1/11/2017.
  */
 
 public class ImageInformation implements Parcelable {
-    public static final Parcelable.Creator<ImageInformation> CREATOR = new Parcelable.Creator<ImageInformation>() {
+
+    public static final Creator<ImageInformation> CREATOR = new Creator<ImageInformation>() {
         @Override
         public ImageInformation createFromParcel(Parcel source) {
             return new ImageInformation(source);
@@ -36,12 +30,13 @@ public class ImageInformation implements Parcelable {
     private float imageAdultContentScore;
     private boolean imageRacyContent;
     private float imageRacyContentScore;
-    private List<Category> category;
-    private List<Face> face;
-    private List<RecognizeResult> recognizeResults;
+    private String category;
+    private String face;
+    private String recognizeResults;
+
 
     public ImageInformation(String imageFormat, int imageWidth, int imageClipArtType, int imageLineDrawingType, boolean imageAdultContent, float imageAdultContentScore, boolean imageRacyContent,
-                            float imageRacyContentScore, List<Category> category, List<Face> face, List<RecognizeResult> recognizeResults) {
+                            float imageRacyContentScore, String category, String face, String recognizeResults) {
         this.imageFormat = imageFormat;
         this.imageWidth = imageWidth;
         this.imageClipArtType = imageClipArtType;
@@ -64,12 +59,9 @@ public class ImageInformation implements Parcelable {
         this.imageAdultContentScore = in.readFloat();
         this.imageRacyContent = in.readByte() != 0;
         this.imageRacyContentScore = in.readFloat();
-        this.category = new ArrayList<Category>();
-        in.readList(this.category, Category.class.getClassLoader());
-        this.face = new ArrayList<Face>();
-        in.readList(this.face, Face.class.getClassLoader());
-        this.recognizeResults = new ArrayList<RecognizeResult>();
-        in.readList(this.recognizeResults, RecognizeResult.class.getClassLoader());
+        this.category = in.readString();
+        this.face = in.readString();
+        this.recognizeResults = in.readString();
     }
 
     public int getImageWidth() {
@@ -104,19 +96,19 @@ public class ImageInformation implements Parcelable {
         return imageFormat;
     }
 
-    public List<Category> getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public List<Face> getFace() {
+    public String getFace() {
         return face;
     }
 
-    public List<RecognizeResult> getRecognizeResults() {
+    public String getRecognizeResults() {
         return recognizeResults;
     }
 
-    public void setRecognizeResults(List<RecognizeResult> recognizeResults) {
+    public void setRecognizeResults(String recognizeResults) {
         this.recognizeResults = recognizeResults;
     }
 
@@ -124,7 +116,7 @@ public class ImageInformation implements Parcelable {
     @Override
     public String toString() {
         return
-                System.lineSeparator() + "imageFormat='" + imageFormat +
+                System.lineSeparator() + "imageFormat=" + imageFormat +
                         System.lineSeparator() + "imageWidth=" + imageWidth +
                         System.lineSeparator() + "imageClipArtType=" + imageClipArtType +
                         System.lineSeparator() + "imageLineDrawingType=" + imageLineDrawingType +
@@ -152,8 +144,8 @@ public class ImageInformation implements Parcelable {
         dest.writeFloat(this.imageAdultContentScore);
         dest.writeByte(this.imageRacyContent ? (byte) 1 : (byte) 0);
         dest.writeFloat(this.imageRacyContentScore);
-        dest.writeList(this.category);
-        dest.writeList(this.face);
-        dest.writeList(this.recognizeResults);
+        dest.writeString(this.category);
+        dest.writeString(this.face);
+        dest.writeString(this.recognizeResults);
     }
 }

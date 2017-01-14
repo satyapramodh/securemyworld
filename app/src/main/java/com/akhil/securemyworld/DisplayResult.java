@@ -34,6 +34,7 @@ public class DisplayResult extends Activity implements View.OnClickListener {
         TextView textView = new TextView(this);
         assert imageInformation != null;
         textView.setText(imageInformation.toString());
+        System.out.println(imageInformation.toString());
         layout.addView(textView);
         Button button = new Button(this);
 

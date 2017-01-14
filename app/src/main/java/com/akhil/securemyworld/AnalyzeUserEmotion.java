@@ -3,9 +3,12 @@ package com.akhil.securemyworld;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.akhil.securemyworld.async.AsyncResponse;
 import com.google.gson.Gson;
 import com.microsoft.projectoxford.emotion.EmotionServiceRestClient;
 import com.microsoft.projectoxford.emotion.contract.FaceRectangle;
@@ -19,6 +22,8 @@ import java.util.List;
 
 import vo.ImageInformation;
 
+import static java.lang.String.format;
+
 /**
  * Created by akhil on 1/13/2017.
  */
@@ -31,27 +36,25 @@ public class AnalyzeUserEmotion extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getIntent().getExtras();
-        imageInformation = bundle.getParcelable(IMAGE_RESULT);
+        final Bundle[] bundle = {getIntent().getExtras()};
+        imageInformation = bundle[0].getParcelable(IMAGE_RESULT);
         if (client == null) {
             client = new EmotionServiceRestClient(getString(R.string.emotion_subscription_key));
-            doAnalyze();
+            try {
+                AsyncResponse<List<RecognizeResult>> response = new AsyncResponse<List<RecognizeResult>>() {
+                    @Override
+                    public void onPostTask(List<RecognizeResult> output) {
+                        Intent intent = new Intent(AnalyzeUserEmotion.this, DisplayResult.class);
+                        bundle[0].putParcelable(IMAGE_RESULT, imageInformation);
+                        intent.putExtras(bundle[0]);
+                        startActivity(intent);
+                        finish();
+                    }
+                };
+                new doRequest(false, response).execute();
+            } catch (Exception ignored) {
+            }
 
-            Intent intent = new Intent(this, ImageRecognition.class);
-            bundle = new Bundle();
-            bundle.putParcelable(IMAGE_RESULT, imageInformation);
-            intent.putExtras(bundle);
-
-            startActivity(intent);
-            finish();
-
-        }
-    }
-
-    public void doAnalyze() {
-        try {
-            new doRequest(false).execute();
-        } catch (Exception ignored) {
         }
     }
 
@@ -69,7 +72,7 @@ public class AnalyzeUserEmotion extends Activity {
         String json = gson.toJson(result);
         Log.d("result", json);
 
-        Log.d("emotion", String.format("Detection done. Elapsed time: %d ms", (System.currentTimeMillis() - startTime)));
+        Log.d("emotion", format("Detection done. Elapsed time: %d ms", (System.currentTimeMillis() - startTime)));
         return result;
     }
 
@@ -87,7 +90,7 @@ public class AnalyzeUserEmotion extends Activity {
         String faceSubscriptionKey = getString(R.string.face_subscription_key);
         FaceServiceRestClient faceClient = new FaceServiceRestClient(faceSubscriptionKey);
         com.microsoft.projectoxford.face.contract.Face[] faces = faceClient.detect(fileInputStream, false, false, null);
-        Log.d("emotion", String.format("Face detection is done. Elapsed time: %d ms", (System.currentTimeMillis() - timeMark)));
+        Log.d("emotion", format("Face detection is done. Elapsed time: %d ms", (System.currentTimeMillis() - timeMark)));
         if (faces != null) {
             faceRectangles = new FaceRectangle[faces.length];
 
@@ -99,7 +102,7 @@ public class AnalyzeUserEmotion extends Activity {
 
         List<RecognizeResult> result = null;
         if (faceRectangles != null) {
-            imageInformation.setRecognizeResults(result);
+            imageInformation.setRecognizeResults(faceRectangles.toString());
             fileInputStream.reset();
 
             timeMark = System.currentTimeMillis();
@@ -108,7 +111,7 @@ public class AnalyzeUserEmotion extends Activity {
 
             String json = gson.toJson(result);
             Log.d("result", json);
-            Log.d("emotion", String.format("Emotion detection is done. Elapsed time: %d ms", (System.currentTimeMillis() - timeMark)));
+            Log.d("emotion", format("Emotion detection is done. Elapsed time: %d ms", (System.currentTimeMillis() - timeMark)));
         }
         return result;
     }
@@ -116,14 +119,17 @@ public class AnalyzeUserEmotion extends Activity {
     private class doRequest extends AsyncTask<String, String, List<RecognizeResult>> {
         private Exception e = null;
         private boolean useFaceRectangles = false;
+        private AsyncResponse<List<RecognizeResult>> asyncResponse;
 
-        public doRequest(boolean useFaceRectangles) {
+
+        public doRequest(boolean useFaceRectangles, AsyncResponse<List<RecognizeResult>> asyncResponse) {
             this.useFaceRectangles = useFaceRectangles;
+            this.asyncResponse = asyncResponse;
         }
 
         @Override
         protected List<RecognizeResult> doInBackground(String... args) {
-            if (this.useFaceRectangles == false) {
+            if (!this.useFaceRectangles) {
                 try {
                     return processWithAutoFaceDetection();
                 } catch (Exception e) {
@@ -139,6 +145,7 @@ public class AnalyzeUserEmotion extends Activity {
             return null;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(List<RecognizeResult> result) {
             super.onPostExecute(result);
@@ -146,20 +153,22 @@ public class AnalyzeUserEmotion extends Activity {
                 this.e = null;
             } else {
                 Integer count = 0;
-
+                imageInformation.setRecognizeResults(result.toString());
                 for (RecognizeResult r : result) {
-                    System.out.println(String.format("\nFace #%1$d \n", count));
-                    System.out.println(String.format("\t anger: %1$.5f\n", r.scores.anger));
-                    System.out.println(String.format("\t contempt: %1$.5f\n", r.scores.contempt));
-                    System.out.println(String.format("\t disgust: %1$.5f\n", r.scores.disgust));
-                    System.out.println(String.format("\t fear: %1$.5f\n", r.scores.fear));
-                    System.out.println(String.format("\t happiness: %1$.5f\n", r.scores.happiness));
-                    System.out.println(String.format("\t neutral: %1$.5f\n", r.scores.neutral));
-                    System.out.println(String.format("\t sadness: %1$.5f\n", r.scores.sadness));
-                    System.out.println(String.format("\t surprise: %1$.5f\n", r.scores.surprise));
-                    System.out.println(String.format("\t face rectangle: %d, %d, %d, %d", r.faceRectangle.left, r.faceRectangle.top, r.faceRectangle.width, r.faceRectangle.height));
+                    System.out.println(format("\nFace #%1$d \n", count));
+                    System.out.println(format("\t anger: %1$.5f\n", r.scores.anger));
+                    System.out.println(format("\t contempt: %1$.5f\n", r.scores.contempt));
+                    System.out.println(format("\t disgust: %1$.5f\n", r.scores.disgust));
+                    System.out.println(format("\t fear: %1$.5f\n", r.scores.fear));
+                    System.out.println(format("\t happiness: %1$.5f\n", r.scores.happiness));
+                    System.out.println(format("\t neutral: %1$.5f\n", r.scores.neutral));
+                    System.out.println(format("\t sadness: %1$.5f\n", r.scores.sadness));
+                    System.out.println(format("\t surprise: %1$.5f\n", r.scores.surprise));
+                    System.out.println(format("\t face rectangle: %d, %d, %d, %d", r.faceRectangle.left, r.faceRectangle.top, r.faceRectangle.width, r.faceRectangle.height));
                     count++;
                 }
+                System.out.println("raw data :" + imageInformation.toString());
+                asyncResponse.onPostTask(result);
             }
         }
     }

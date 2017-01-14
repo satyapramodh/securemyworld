@@ -3,9 +3,12 @@ package com.akhil.securemyworld;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.akhil.securemyworld.async.AsyncResponse;
 import com.google.gson.Gson;
 import com.microsoft.projectoxford.vision.VisionServiceClient;
 import com.microsoft.projectoxford.vision.VisionServiceRestClient;
@@ -17,8 +20,11 @@ import com.microsoft.projectoxford.vision.rest.VisionServiceException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import vo.ApplicationConstants;
+import vo.CustomCategory;
 import vo.ImageInformation;
 
 /**
@@ -36,26 +42,27 @@ public class AnalyzeUserImage extends Activity {
 
         if (client == null) {
             client = new VisionServiceRestClient(getString(R.string.image_subscription_key));
-            doAnalyze();
+            try {
+                AsyncResponse<AnalysisResult> response = new AsyncResponse<AnalysisResult>() {
+                    @Override
+                    public void onPostTask(AnalysisResult output) {
+                        Intent intent = new Intent(AnalyzeUserImage.this, AnalyzeUserEmotion.class);
+                        String filename = getIntent().getStringExtra(IMAGE_BIT_MAP);
+                        intent.putExtra(IMAGE_BIT_MAP, filename);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(IMAGE_RESULT, imageInformation);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        finish();
+                    }
+                };
+                new doRequest(response).execute();
+            } catch (Exception ignored) {
+            }
         }
     }
 
-    public void doAnalyze() {
-        try {
-            new doRequest().execute();
-            Intent intent = new Intent(this, AnalyzeUserEmotion.class);
-            String filename = getIntent().getStringExtra(IMAGE_BIT_MAP);
-            intent.putExtra(IMAGE_BIT_MAP, filename);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(IMAGE_RESULT, imageInformation);
-            intent.putExtras(bundle);
-            startActivity(intent);
-            finish();
-        } catch (Exception ignored) {
-        }
-    }
-
-    private String process() throws VisionServiceException, IOException {
+    private AnalysisResult process() throws VisionServiceException, IOException {
         Gson gson = new Gson();
         String[] features = {ApplicationConstants.IMAGE_TYPE.getValue(), ApplicationConstants.COLOR.getValue(),
                 ApplicationConstants.FACES.getValue(), ApplicationConstants.ADULT.getValue(),
@@ -69,17 +76,19 @@ public class AnalyzeUserImage extends Activity {
         String result = gson.toJson(v);
         Log.d("result", result);
 
-        return result;
+        return v;
     }
 
-    private class doRequest extends AsyncTask<String, String, String> {
+    private class doRequest extends AsyncTask<String, String, AnalysisResult> {
+        private AsyncResponse<AnalysisResult> asyncResponse;
         private Exception e = null;
 
-        doRequest() {
+        public doRequest(AsyncResponse<AnalysisResult> asyncResponse) {
+            this.asyncResponse = asyncResponse;
         }
 
         @Override
-        protected String doInBackground(String... args) {
+        protected AnalysisResult doInBackground(String... args) {
             try {
                 return process();
             } catch (Exception e) {
@@ -89,12 +98,10 @@ public class AnalyzeUserImage extends Activity {
             return null;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
-        protected void onPostExecute(String data) {
-            super.onPostExecute(data);
-
-            Gson gson = new Gson();
-            AnalysisResult result = gson.fromJson(data, AnalysisResult.class);
+        protected void onPostExecute(AnalysisResult result) {
+            super.onPostExecute(result);
 
             System.out.println("Image format: " + result.metadata.format + "\n");
             System.out.println("Image width: " + result.metadata.width + ", height:" + result.metadata.height + "\n");
@@ -105,14 +112,16 @@ public class AnalyzeUserImage extends Activity {
             System.out.println("Is Racy Content:" + result.adult.isRacyContent + "\n");
             System.out.println("Racy score:" + result.adult.racyScore + "\n\n");
 
+            List<CustomCategory> customCategories = new ArrayList<>();
+            for (Category category : result.categories) {
+                customCategories.add(new CustomCategory(category));
+                System.out.println("Category: " + category.name + ", score: " + category.score + "\n");
+            }
             final Metadata metadata = result.metadata;
             imageInformation = new ImageInformation(metadata.format, metadata.width, result.imageType.clipArtType,
                     result.imageType.lineDrawingType, result.adult.isAdultContent, result.adult.adultScore,
-                    result.adult.isRacyContent, result.adult.racyScore, result.categories, result.faces, null);
+                    result.adult.isRacyContent, result.adult.racyScore, customCategories.toString(), result.faces.toString(), null);
 
-            for (Category category : result.categories) {
-                System.out.println("Category: " + category.name + ", score: " + category.score + "\n");
-            }
 
             int faceCount = 0;
             for (Face face : result.faces) {
@@ -129,7 +138,8 @@ public class AnalyzeUserImage extends Activity {
             System.out.println("Dominant Color Background :" + result.color.dominantColorBackground + "\n");
 
             System.out.println("\n--- Raw Data ---\n\n");
-            System.out.println(data);
+            System.out.println(imageInformation.toString());
+            asyncResponse.onPostTask(result);
         }
     }
 }
