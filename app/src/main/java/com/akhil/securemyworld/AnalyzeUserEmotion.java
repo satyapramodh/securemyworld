@@ -3,9 +3,7 @@ package com.akhil.securemyworld;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 
 import java.io.FileInputStream;
 
@@ -15,7 +13,6 @@ import java.io.FileInputStream;
 public class AnalyzeUserEmotion extends Activity {
     private static final String IMAGE_BIT_MAP = "imageBitMap";
 
-    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
