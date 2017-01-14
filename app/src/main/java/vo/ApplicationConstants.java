@@ -6,11 +6,10 @@ package vo;
 
 public enum ApplicationConstants {
 
-    APPLICATION_PACKAGE_NAME("com.akhil.securemyworld"),
     TAKE_PHOTO("Take Photo"),
     CHOOSE_FROM_LIBRARY("Choose from Gallery"),
     CANCEL("Cancel"),
-    REMOVE_PHOTO("Remove Photo");
+    REMOVE_PHOTO("Remove Photo"), IMAGE_TYPE("ImageType"), COLOR("Color"), FACES("Faces"), ADULT("Adult"), CATEGORIES("Categories");
     private String value;
 
     ApplicationConstants(String value) {

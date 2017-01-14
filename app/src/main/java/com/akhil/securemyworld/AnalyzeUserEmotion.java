@@ -16,6 +16,8 @@ import com.microsoft.projectoxford.vision.rest.VisionServiceException;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import vo.ApplicationConstants;
+
 /**
  * Created by akhil on 1/13/2017.
  */
@@ -36,13 +38,15 @@ public class AnalyzeUserEmotion extends Activity {
     public void doAnalyze() {
         try {
             new doRequest().execute();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
     private String process() throws VisionServiceException, IOException {
         Gson gson = new Gson();
-        String[] features = {"ImageType", "Color", "Faces", "Adult", "Categories"};
+        String[] features = {ApplicationConstants.IMAGE_TYPE.getValue(), ApplicationConstants.COLOR.getValue(),
+                ApplicationConstants.FACES.getValue(), ApplicationConstants.ADULT.getValue(),
+                ApplicationConstants.CATEGORIES.getValue()};
         String[] details = {};
         String filename = getIntent().getStringExtra(IMAGE_BIT_MAP);
         FileInputStream fileInputStream = this.openFileInput(filename);
