@@ -1,12 +1,15 @@
 package vo;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 
 import com.microsoft.projectoxford.emotion.contract.RecognizeResult;
 import com.microsoft.projectoxford.vision.contract.Category;
 import com.microsoft.projectoxford.vision.contract.Face;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,10 +17,10 @@ import java.util.List;
  */
 
 public class ImageInformation implements Parcelable {
-    public static final Creator<ImageInformation> CREATOR = new Creator<ImageInformation>() {
+    public static final Parcelable.Creator<ImageInformation> CREATOR = new Parcelable.Creator<ImageInformation>() {
         @Override
-        public ImageInformation createFromParcel(Parcel in) {
-            return new ImageInformation(in);
+        public ImageInformation createFromParcel(Parcel source) {
+            return new ImageInformation(source);
         }
 
         @Override
@@ -53,14 +56,20 @@ public class ImageInformation implements Parcelable {
     }
 
     protected ImageInformation(Parcel in) {
-        imageFormat = in.readString();
-        imageWidth = in.readInt();
-        imageClipArtType = in.readInt();
-        imageLineDrawingType = in.readInt();
-        imageAdultContent = in.readByte() != 0;
-        imageAdultContentScore = in.readFloat();
-        imageRacyContent = in.readByte() != 0;
-        imageRacyContentScore = in.readFloat();
+        this.imageFormat = in.readString();
+        this.imageWidth = in.readInt();
+        this.imageClipArtType = in.readInt();
+        this.imageLineDrawingType = in.readInt();
+        this.imageAdultContent = in.readByte() != 0;
+        this.imageAdultContentScore = in.readFloat();
+        this.imageRacyContent = in.readByte() != 0;
+        this.imageRacyContentScore = in.readFloat();
+        this.category = new ArrayList<Category>();
+        in.readList(this.category, Category.class.getClassLoader());
+        this.face = new ArrayList<Face>();
+        in.readList(this.face, Face.class.getClassLoader());
+        this.recognizeResults = new ArrayList<RecognizeResult>();
+        in.readList(this.recognizeResults, RecognizeResult.class.getClassLoader());
     }
 
     public int getImageWidth() {
@@ -95,7 +104,6 @@ public class ImageInformation implements Parcelable {
         return imageFormat;
     }
 
-
     public List<Category> getCategory() {
         return category;
     }
@@ -112,23 +120,40 @@ public class ImageInformation implements Parcelable {
         this.recognizeResults = recognizeResults;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public String toString() {
+        return
+                System.lineSeparator() + "imageFormat='" + imageFormat +
+                        System.lineSeparator() + "imageWidth=" + imageWidth +
+                        System.lineSeparator() + "imageClipArtType=" + imageClipArtType +
+                        System.lineSeparator() + "imageLineDrawingType=" + imageLineDrawingType +
+                        System.lineSeparator() + "imageAdultContent=" + imageAdultContent +
+                        System.lineSeparator() + "imageAdultContentScore=" + imageAdultContentScore +
+                        System.lineSeparator() + "imageRacyContent=" + imageRacyContent +
+                        System.lineSeparator() + "imageRacyContentScore=" + imageRacyContentScore +
+                        System.lineSeparator() + "category=" + category +
+                        System.lineSeparator() + "face=" + face +
+                        System.lineSeparator() + "recognizeResults=" + recognizeResults;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(imageFormat);
-        parcel.writeString(String.valueOf(imageWidth));
-        parcel.writeString(String.valueOf(imageClipArtType));
-        parcel.writeString(String.valueOf(imageLineDrawingType));
-        parcel.writeString(String.valueOf(imageAdultContent));
-        parcel.writeString(String.valueOf(imageAdultContentScore));
-        parcel.writeString(String.valueOf(imageRacyContent));
-        parcel.writeString(String.valueOf(imageRacyContentScore));
-        parcel.writeString(String.valueOf(category));
-        parcel.writeList(face);
-        parcel.writeList(recognizeResults);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.imageFormat);
+        dest.writeInt(this.imageWidth);
+        dest.writeInt(this.imageClipArtType);
+        dest.writeInt(this.imageLineDrawingType);
+        dest.writeByte(this.imageAdultContent ? (byte) 1 : (byte) 0);
+        dest.writeFloat(this.imageAdultContentScore);
+        dest.writeByte(this.imageRacyContent ? (byte) 1 : (byte) 0);
+        dest.writeFloat(this.imageRacyContentScore);
+        dest.writeList(this.category);
+        dest.writeList(this.face);
+        dest.writeList(this.recognizeResults);
     }
 }

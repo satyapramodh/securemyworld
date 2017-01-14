@@ -63,7 +63,7 @@ public class AnalyzeUserEmotion extends Activity {
         String filename = getIntent().getStringExtra(IMAGE_BIT_MAP);
         FileInputStream fileInputStream = this.openFileInput(filename);
         long startTime = System.currentTimeMillis();
-        List<RecognizeResult> result = null;
+        List<RecognizeResult> result;
         result = this.client.recognizeImage(fileInputStream);
 
         String json = gson.toJson(result);

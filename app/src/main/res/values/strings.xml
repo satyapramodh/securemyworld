@@ -10,5 +10,6 @@
     <string name="image_subscription_key">0a0cb9836d81462ba8e3c9fdb7ccf3e8</string>
     <string name="emotion_subscription_key">052e09edf3824caebab34dcfd2b58df4</string>
     <string name="face_subscription_key">184c93c3b8f64bec82d0367f9edba78b</string>
+    <string name="image_analysis_result">Image Analysis</string>
 
 </resources>
