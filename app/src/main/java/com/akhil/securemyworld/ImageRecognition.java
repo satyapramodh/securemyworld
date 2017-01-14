@@ -206,7 +206,7 @@ public class ImageRecognition extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button_analyze) {
-            Intent intent = new Intent(this, AnalyzeUserEmotion.class);
+            Intent intent = new Intent(this, AnalyzeUserImage.class);
             String fileName = "capturedImage.png";
             try {
                 FileOutputStream fileOutputStream = this.openFileOutput(fileName, Context.MODE_PRIVATE);

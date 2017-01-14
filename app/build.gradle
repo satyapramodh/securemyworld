@@ -33,5 +33,7 @@ dependencies {
     compile(group: 'com.microsoft.azure', name: 'azure-notifications-handler', version: '1.0.1', ext: 'jar')
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.microsoft.projectoxford:vision:1.0.354'
+    compile 'com.microsoft.projectoxford:emotion:1.0.0'
+    compile 'com.microsoft.projectoxford:face:1.1.0'
     testCompile 'junit:junit:4.12'
 }
