@@ -2,11 +2,11 @@ package com.akhil.securemyworld;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,9 +33,15 @@ public class DisplayResult extends Activity implements View.OnClickListener {
 
         TextView textView = new TextView(this);
         assert imageInformation != null;
-        textView.setText(imageInformation.toString());
-        System.out.println(imageInformation.toString());
-        layout.addView(textView);
+        if (imageInformation.isImageRacyContent() || imageInformation.isImageAdultContent()) {
+            textView.setText(imageInformation.toString());
+            textView.setTextColor(Color.parseColor("#FF0000"));
+            layout.addView(textView);
+        } else {
+            textView.setText(imageInformation.toString());
+            textView.setTextColor(Color.parseColor("#000000"));
+            layout.addView(textView);
+        }
         Button button = new Button(this);
 
         button.setText(HOME_SCREEN);

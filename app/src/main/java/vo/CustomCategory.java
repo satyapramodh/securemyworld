@@ -23,7 +23,6 @@ public class CustomCategory extends Category implements Parcelable {
     };
     private Category category;
 
-
     public CustomCategory(Category category) {
         this.category = category;
     }
