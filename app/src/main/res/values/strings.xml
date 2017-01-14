@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="app_name">Secure My World</string>
+    <string name="image_border">Image Border</string>
+    <string name="user_image">User Image</string>
+    <string name="edit_image_icon">Edit image icon</string>
+    <string name="button_analyze">Analyze</string>
+    <string name="button_analyze_text">Analyze</string>
+
+</resources>
