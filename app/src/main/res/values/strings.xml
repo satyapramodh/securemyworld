@@ -6,5 +6,7 @@
     <string name="edit_image_icon">Edit image icon</string>
     <string name="button_analyze">Analyze</string>
     <string name="button_analyze_text">Analyze</string>
+    <string name="subscription_key">0a0cb9836d81462ba8e3c9fdb7ccf3e8</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
