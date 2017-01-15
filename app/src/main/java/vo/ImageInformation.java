@@ -22,10 +22,6 @@ public class ImageInformation implements Parcelable {
             return new ImageInformation[size];
         }
     };
-    private String imageFormat;
-    private int imageWidth;
-    private int imageClipArtType;
-    private int imageLineDrawingType;
     private boolean imageAdultContent;
     private float imageAdultContentScore;
     private boolean imageRacyContent;
@@ -33,12 +29,8 @@ public class ImageInformation implements Parcelable {
     private String category;
     private String face;
 
-    public ImageInformation(String imageFormat, int imageWidth, int imageClipArtType, int imageLineDrawingType, boolean imageAdultContent, float imageAdultContentScore, boolean imageRacyContent,
+    public ImageInformation(boolean imageAdultContent, float imageAdultContentScore, boolean imageRacyContent,
                             float imageRacyContentScore, String category, String face) {
-        this.imageFormat = imageFormat;
-        this.imageWidth = imageWidth;
-        this.imageClipArtType = imageClipArtType;
-        this.imageLineDrawingType = imageLineDrawingType;
         this.imageAdultContent = imageAdultContent;
         this.imageAdultContentScore = imageAdultContentScore;
         this.imageRacyContent = imageRacyContent;
@@ -48,28 +40,12 @@ public class ImageInformation implements Parcelable {
     }
 
     protected ImageInformation(Parcel in) {
-        this.imageFormat = in.readString();
-        this.imageWidth = in.readInt();
-        this.imageClipArtType = in.readInt();
-        this.imageLineDrawingType = in.readInt();
         this.imageAdultContent = in.readByte() != 0;
         this.imageAdultContentScore = in.readFloat();
         this.imageRacyContent = in.readByte() != 0;
         this.imageRacyContentScore = in.readFloat();
         this.category = in.readString();
         this.face = in.readString();
-    }
-
-    public int getImageWidth() {
-        return imageWidth;
-    }
-
-    public int getImageClipArtType() {
-        return imageClipArtType;
-    }
-
-    public int getImageLineDrawingType() {
-        return imageLineDrawingType;
     }
 
     public boolean isImageAdultContent() {
@@ -88,10 +64,6 @@ public class ImageInformation implements Parcelable {
         return imageRacyContentScore;
     }
 
-    public String getImageFormat() {
-        return imageFormat;
-    }
-
     public String getCategory() {
         return category;
     }
@@ -104,14 +76,8 @@ public class ImageInformation implements Parcelable {
     @Override
     public String toString() {
         return
-                System.lineSeparator() + " Image Format : " + imageFormat +
-                        System.lineSeparator() + " Image Width : " + imageWidth +
-                        System.lineSeparator() + " Image Clip Art Type : " + imageClipArtType +
-                        System.lineSeparator() + " Image Line Drawing Type : " + imageLineDrawingType +
-                        System.lineSeparator() + " Image Adult Content : " + imageAdultContent +
-                        System.lineSeparator() + " Image Adult Content Score : " + imageAdultContentScore +
-                        System.lineSeparator() + " Image Racy Content : " + imageRacyContent +
-                        System.lineSeparator() + " Image Racy Content Score : " + imageRacyContentScore +
+                System.lineSeparator() + " Adult Content : " + imageAdultContent + ", " + imageAdultContentScore +
+                        System.lineSeparator() + " Race Content : " + imageRacyContent + ", " + imageRacyContentScore +
                         System.lineSeparator() + " Category : " + category +
                         System.lineSeparator() + " Face : " + face;
     }
@@ -123,10 +89,6 @@ public class ImageInformation implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.imageFormat);
-        dest.writeInt(this.imageWidth);
-        dest.writeInt(this.imageClipArtType);
-        dest.writeInt(this.imageLineDrawingType);
         dest.writeByte(this.imageAdultContent ? (byte) 1 : (byte) 0);
         dest.writeFloat(this.imageAdultContentScore);
         dest.writeByte(this.imageRacyContent ? (byte) 1 : (byte) 0);
