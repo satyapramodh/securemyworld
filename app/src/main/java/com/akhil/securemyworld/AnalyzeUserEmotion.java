@@ -19,6 +19,7 @@ import com.microsoft.projectoxford.face.FaceServiceRestClient;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import vo.ImageInformation;
 
@@ -30,6 +31,7 @@ import static java.lang.String.format;
 public class AnalyzeUserEmotion extends Activity {
     private static final String IMAGE_BIT_MAP = "imageBitMap";
     private static final String IMAGE_RESULT = "imageResult";
+    private static final String TAG = AnalyzeUserEmotion.class.getSimpleName();
     private EmotionServiceRestClient client;
     private ImageInformation imageInformation;
 
@@ -150,10 +152,28 @@ public class AnalyzeUserEmotion extends Activity {
             super.onPostExecute(result);
             if (e != null) {
                 this.e = null;
+            } else if (result.size() == 0) {
+                Log.d(TAG, "recognize result returned zero result.");
             } else {
                 Integer count = 0;
-                asyncResponse.onPostTask(result);
+                StringBuilder recognitionResult = new StringBuilder();
+                for (RecognizeResult r : result) {
+
+                    recognitionResult.append(format(Locale.ENGLISH, "\nFace #%1$d \n", count));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t anger: %1$.5f\n", r.scores.anger));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t contempt: %1$.5f\n", r.scores.contempt));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t disgust: %1$.5f\n", r.scores.disgust));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t fear: %1$.5f\n", r.scores.fear));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t happiness: %1$.5f\n", r.scores.happiness));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t neutral: %1$.5f\n", r.scores.neutral));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t sadness: %1$.5f\n", r.scores.sadness));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t surprise: %1$.5f\n", r.scores.surprise));
+                    recognitionResult.append(format(Locale.ENGLISH, "\t face rectangle: %d, %d, %d, %d", r.faceRectangle.left, r.faceRectangle.top, r.faceRectangle.width, r.faceRectangle.height));
+                    count++;
+                }
+                imageInformation.updateEmotionAnalysis(recognitionResult.toString());
             }
+            asyncResponse.onPostTask(result);
         }
     }
 }

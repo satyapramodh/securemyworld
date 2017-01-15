@@ -28,15 +28,17 @@ public class ImageInformation implements Parcelable {
     private float imageRacyContentScore;
     private String category;
     private String face;
+    private String emotionAnalysis;
 
     public ImageInformation(boolean imageAdultContent, float imageAdultContentScore, boolean imageRacyContent,
-                            float imageRacyContentScore, String category, String face) {
+                            float imageRacyContentScore, String category, String face, String emotionAnalysis) {
         this.imageAdultContent = imageAdultContent;
         this.imageAdultContentScore = imageAdultContentScore;
         this.imageRacyContent = imageRacyContent;
         this.imageRacyContentScore = imageRacyContentScore;
         this.category = category;
         this.face = face;
+        this.emotionAnalysis = emotionAnalysis;
     }
 
     protected ImageInformation(Parcel in) {
@@ -46,6 +48,15 @@ public class ImageInformation implements Parcelable {
         this.imageRacyContentScore = in.readFloat();
         this.category = in.readString();
         this.face = in.readString();
+        this.emotionAnalysis = in.readString();
+    }
+
+    public void updateEmotionAnalysis(String emotionAnalysis) {
+        this.emotionAnalysis = emotionAnalysis;
+    }
+
+    public String getEmotionAnalysis() {
+        return emotionAnalysis;
     }
 
     public boolean isImageAdultContent() {
@@ -79,7 +90,8 @@ public class ImageInformation implements Parcelable {
                 System.lineSeparator() + " Adult Content : " + imageAdultContent + ", " + imageAdultContentScore +
                         System.lineSeparator() + " Race Content : " + imageRacyContent + ", " + imageRacyContentScore +
                         System.lineSeparator() + " Category : " + category +
-                        System.lineSeparator() + " Face : " + face;
+                        System.lineSeparator() + " Face : " + face +
+                        System.lineSeparator() + " Emotions : " + emotionAnalysis;
     }
 
     @Override
@@ -95,5 +107,6 @@ public class ImageInformation implements Parcelable {
         dest.writeFloat(this.imageRacyContentScore);
         dest.writeString(this.category);
         dest.writeString(this.face);
+        dest.writeString(this.emotionAnalysis);
     }
 }

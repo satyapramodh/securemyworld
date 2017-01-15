@@ -26,6 +26,7 @@ import vo.ImageInformation;
  * Created by akhil on 1/13/2017.
  */
 public class AnalyzeUserImage extends Activity {
+    public static final String EMPTY = "";
     private static final String IMAGE_RESULT = "imageResult";
     private static final String IMAGE_BIT_MAP = "imageBitMap";
     private ImageInformation imageInformation;
@@ -102,20 +103,10 @@ public class AnalyzeUserImage extends Activity {
             for (Category category : result.categories) {
                 customCategories.append(category.name).append(" : ").append(category.score).append(System.lineSeparator());
             }
-            StringBuilder faceInformation = new StringBuilder();
-            int faceCount = 0;
-          /*  for (Face face : result.faces) {
-                faceCount++;
-                faceInformation.append(FACE).append(faceCount).append(COMMA).append(GENDER).append(face.gender).append(COMMA).
-                        append(SCORE).append(face.genderScore).append(COMMA).append(AGE).append(face.age).append(COMMA).append(LEFT).
-                        append(face.faceRectangle.left).append(COMMA).append(TOP).append(face.faceRectangle.top).append(COMMA)
-                        .append(WIDTH).append(face.faceRectangle.width).append(COMMA).append(HEIGHT).append(face.faceRectangle.height)
-                        .append(StandardSystemProperty.LINE_SEPARATOR);
-            }*/
 
             imageInformation = new ImageInformation(
                     result.adult.isAdultContent, result.adult.adultScore,
-                    result.adult.isRacyContent, result.adult.racyScore, customCategories.toString(), faceInformation.toString());
+                    result.adult.isRacyContent, result.adult.racyScore, customCategories.toString(), EMPTY, EMPTY);
             asyncResponse.onPostTask(result);
         }
     }
