@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -54,7 +55,7 @@ public class ImageRecognition extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
         imageView = (ImageView) findViewById(R.id.image_view);
-
+        thumbnail = imageView.getDrawingCache();
         try {
             mClient = new MobileServiceClient(
                     APP_URL,
@@ -210,6 +211,7 @@ public class ImageRecognition extends Activity implements View.OnClickListener {
             String fileName = "capturedImage.png";
             try {
                 FileOutputStream fileOutputStream = this.openFileOutput(fileName, Context.MODE_PRIVATE);
+                thumbnail = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                 thumbnail.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
                 fileOutputStream.close();
                 thumbnail.recycle();
