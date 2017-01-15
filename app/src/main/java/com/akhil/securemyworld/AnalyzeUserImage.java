@@ -100,13 +100,15 @@ public class AnalyzeUserImage extends Activity {
             super.onPostExecute(result);
 
             StringBuilder customCategories = new StringBuilder();
-            for (Category category : result.categories) {
-                customCategories.append(category.name).append(" : ").append(category.score).append(System.lineSeparator());
-            }
+            if (result != null) {
+                for (Category category : result.categories) {
+                    customCategories.append(category.name).append(" : ").append(category.score).append(System.lineSeparator());
+                }
 
-            imageInformation = new ImageInformation(
-                    result.adult.isAdultContent, result.adult.adultScore,
-                    result.adult.isRacyContent, result.adult.racyScore, customCategories.toString(), EMPTY, EMPTY);
+                imageInformation = new ImageInformation(
+                        result.adult.isAdultContent, result.adult.adultScore,
+                        result.adult.isRacyContent, result.adult.racyScore, customCategories.toString(), EMPTY, EMPTY);
+            }
             asyncResponse.onPostTask(result);
         }
     }
