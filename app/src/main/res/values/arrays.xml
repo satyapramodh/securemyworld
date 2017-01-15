@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="sex_type_list">
+        <item>@string/please_select</item>
+        <item>@string/sex_type_1</item>
+        <item>@string/sex_type_2</item>
+    </string-array>
+</resources>

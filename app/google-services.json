@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "219513279183",
+    "firebase_url": "https://secure-my-world.firebaseio.com",
+    "project_id": "secure-my-world",
+    "storage_bucket": "secure-my-world.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219513279183:android:8858416fe8c50ff7",
+        "android_client_info": {
+          "package_name": "com.akhil.securemyworld"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219513279183-e0nok757l11u6tdb6hilov6o61npf43p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.akhil.securemyworld",
+            "certificate_hash": "50A251CB0B9DD9045A7C0BE6950E76AD7E49EF0D"
+          }
+        },
+        {
+          "client_id": "219513279183-i39vs1m5slnug2su9sikt1pn17p0aj1g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLHWpC3xu3cGGSj0ARUKLNuobOKIZkrA4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219513279183-i39vs1m5slnug2su9sikt1pn17p0aj1g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

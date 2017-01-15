@@ -3,6 +3,7 @@
     <string name="app_name">Secure My World</string>
     <string name="image_border">Image Border</string>
     <string name="user_image">User Image</string>
+    <string name="facebook_application_id">210068689453269</string>
     <string name="edit_image_icon">Edit image icon</string>
     <string name="button_analyze">Analyze</string>
     <string name="button_analyze_text">Analyze</string>
@@ -11,5 +12,29 @@
     <string name="emotion_subscription_key">052e09edf3824caebab34dcfd2b58df4</string>
     <string name="face_subscription_key">184c93c3b8f64bec82d0367f9edba78b</string>
     <string name="image_analysis_result">Image Analysis</string>
+    <string name="edit_user_profile">Edit User Profile</string>
+    <string name="sign_in_cancelled">Sign In Cancelled</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="unknown_sign_in_response">Unknown Sign In Response</string>
+    <string name="delete_user_account">Delete Account</string>
+    <string name="feedback_name">Name: </string>
+    <string name="feedback_email">Email: </string>
+    <string name="sex_type">Sex</string>
+    <string name="user_profile_title">Edit User Profile</string>
+    <string name="user_profile_email">Email ID:</string>
+    <string name="user_profile_address">Address</string>
+    <string name="send_edit_user_profile">Update User Profile</string>
+    <string name="user_profile_mobile_number">Mobile</string>
+    <string name="user_profile_name_user_name">Name</string>
+    <string name="destination_hint">Please Enter Address</string>
+    <string name="powered_by_google_text">Address Search Powered By Google</string>
+    <string name="selected_place">Selected Place:</string>
+    <string name="address">Address:</string>
+    <string name="sex">Sex</string>
+    <string name="google_maps_key">AIzaSyCiYP2D7yrtVyiqGK1PLXz1rapOl-cLm8c</string>
+    <string name="sex_type_1">Male</string>
+    <string name="sex_type_2">Female</string>
+    <string name="neutral_option">I don\'t want to provide this info</string>
+    <string name="please_select">Please Select</string>
 
 </resources>
