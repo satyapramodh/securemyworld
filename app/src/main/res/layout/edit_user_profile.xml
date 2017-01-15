@@ -45,14 +45,14 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/user_profile_mobile_number" />
+            android:hint="@string/user_emergency_mobile_number" />
 
         <EditText
             android:id="@+id/edit_user_mobile_number"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="@string/user_profile_mobile_number"
+            android:hint="@string/user_emergency_mobile_number"
             android:inputType="number"
             android:maxLength="10" />
 

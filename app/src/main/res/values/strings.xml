@@ -3,7 +3,7 @@
     <string name="app_name">Secure My World</string>
     <string name="image_border">Image Border</string>
     <string name="user_image">User Image</string>
-    <string name="facebook_application_id">210068689453269</string>
+    <string name="facebook_application_id">371196986580643</string>
     <string name="edit_image_icon">Edit image icon</string>
     <string name="button_analyze">Analyze</string>
     <string name="button_analyze_text">Analyze</string>
@@ -24,7 +24,7 @@
     <string name="user_profile_email">Email ID:</string>
     <string name="user_profile_address">Address</string>
     <string name="send_edit_user_profile">Update User Profile</string>
-    <string name="user_profile_mobile_number">Mobile</string>
+    <string name="user_emergency_mobile_number">Emergency Contact Number</string>
     <string name="user_profile_name_user_name">Name</string>
     <string name="destination_hint">Please Enter Address</string>
     <string name="powered_by_google_text">Address Search Powered By Google</string>
