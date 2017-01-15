@@ -105,28 +105,28 @@ public class ImageInformation implements Parcelable {
     }
 
     public String getRecognizeResults() {
-        return recognizeResults;
+        return recognizeResults.toString();
     }
 
     public void setRecognizeResults(String recognizeResults) {
-        this.recognizeResults = recognizeResults;
+        this.recognizeResults = recognizeResults != null ? recognizeResults.toString() : recognizeResults;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public String toString() {
         return
-                System.lineSeparator() + "imageFormat=" + imageFormat +
-                        System.lineSeparator() + "imageWidth=" + imageWidth +
-                        System.lineSeparator() + "imageClipArtType=" + imageClipArtType +
-                        System.lineSeparator() + "imageLineDrawingType=" + imageLineDrawingType +
-                        System.lineSeparator() + "imageAdultContent=" + imageAdultContent +
-                        System.lineSeparator() + "imageAdultContentScore=" + imageAdultContentScore +
-                        System.lineSeparator() + "imageRacyContent=" + imageRacyContent +
-                        System.lineSeparator() + "imageRacyContentScore=" + imageRacyContentScore +
-                        System.lineSeparator() + "category=" + category +
-                        System.lineSeparator() + "face=" + face +
-                        System.lineSeparator() + "recognizeResults=" + recognizeResults;
+                System.lineSeparator() + " Image Format : " + imageFormat +
+                        System.lineSeparator() + " Image Width : " + imageWidth +
+                        System.lineSeparator() + " Image Clip Art Type : " + imageClipArtType +
+                        System.lineSeparator() + " Image Line Drawing Type : " + imageLineDrawingType +
+                        System.lineSeparator() + " Image Adult Content : " + imageAdultContent +
+                        System.lineSeparator() + " Image Adult Content Score : " + imageAdultContentScore +
+                        System.lineSeparator() + " Image Racy Content : " + imageRacyContent +
+                        System.lineSeparator() + " Image Racy Content Score : " + imageRacyContentScore +
+                        System.lineSeparator() + " Category : " + category +
+                        System.lineSeparator() + " Face : " + face +
+                        System.lineSeparator() + "Recognize Results : " + recognizeResults;
     }
 
     @Override

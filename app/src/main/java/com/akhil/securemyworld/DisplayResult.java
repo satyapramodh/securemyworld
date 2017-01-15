@@ -43,6 +43,7 @@ public class DisplayResult extends Activity implements View.OnClickListener {
         final ViewGroup layout = (ViewGroup) findViewById(R.id.image_analysis_result);
 
         TextView textView = new TextView(this);
+        textView.setTextSize(20);
         assert imageInformation != null;
         if (imageInformation.isImageRacyContent() || imageInformation.isImageAdultContent()) {
             textView.setText(imageInformation.toString());

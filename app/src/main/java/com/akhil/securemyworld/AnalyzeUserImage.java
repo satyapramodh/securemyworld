@@ -115,7 +115,7 @@ public class AnalyzeUserImage extends Activity {
             List<CustomCategory> customCategories = new ArrayList<>();
             for (Category category : result.categories) {
                 customCategories.add(new CustomCategory(category));
-                System.out.println("Category: " + category.name + ", score: " + category.score + "\n");
+                System.out.println("Category: " + category.name.toString() + ", score: " + category.score + "\n");
             }
             final Metadata metadata = result.metadata;
             imageInformation = new ImageInformation(metadata.format, metadata.width, result.imageType.clipArtType,
