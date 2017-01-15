@@ -206,22 +206,45 @@ public class ImageRecognition extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.button_analyze) {
-            Intent intent = new Intent(this, AnalyzeUserImage.class);
-            String fileName = "capturedImage.png";
-            try {
-                FileOutputStream fileOutputStream = this.openFileOutput(fileName, Context.MODE_PRIVATE);
-                thumbnail = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                thumbnail.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-                fileOutputStream.close();
-                thumbnail.recycle();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            intent.putExtra(IMAGE_BIT_MAP, fileName);
-            startActivity(intent);
-            finish();
+        Intent intent = null;
+        switch (view.getId()) {
+            case R.id.button_edit_profile:
+                intent = new Intent(this, EditUserProfileActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.button_logout:
+                intent = new Intent(this, UserLogOutActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.button_delete_account:
+                intent = new Intent(this, DeleteUserAccountActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            default:
+                startAnalysis();
+                break;
         }
+    }
+
+    private void startAnalysis() {
+        Intent intent;
+        intent = new Intent(this, AnalyzeUserImage.class);
+        String fileName = "capturedImage.png";
+        try {
+            FileOutputStream fileOutputStream = this.openFileOutput(fileName, Context.MODE_PRIVATE);
+            thumbnail = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+            thumbnail.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            fileOutputStream.close();
+            thumbnail.recycle();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        intent.putExtra(IMAGE_BIT_MAP, fileName);
+        startActivity(intent);
+        finish();
     }
 }
