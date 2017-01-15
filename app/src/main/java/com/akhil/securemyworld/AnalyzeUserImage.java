@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.akhil.securemyworld.async.AsyncResponse;
+import com.google.common.base.StandardSystemProperty;
 import com.google.gson.Gson;
 import com.microsoft.projectoxford.vision.VisionServiceClient;
 import com.microsoft.projectoxford.vision.VisionServiceRestClient;
@@ -20,20 +21,27 @@ import com.microsoft.projectoxford.vision.rest.VisionServiceException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import vo.ApplicationConstants;
-import vo.CustomCategory;
 import vo.ImageInformation;
 
 /**
  * Created by akhil on 1/13/2017.
  */
 public class AnalyzeUserImage extends Activity {
+    private static final String CATEGORY = "Category : ";
     private static final String IMAGE_RESULT = "imageResult";
     private static final String IMAGE_BIT_MAP = "imageBitMap";
-    ImageInformation imageInformation;
+    private static final String COMMA = ", ";
+    private static final String FACE = "Face No. : ";
+    private static final String GENDER = "Gender : ";
+    private static final String SCORE = "Score : ";
+    private static final String AGE = "Age: ";
+    private static final String LEFT = "Left : ";
+    private static final String TOP = "Top : ";
+    private static final String WIDTH = "Width : ";
+    private static final String HEIGHT = "Height : ";
+    private ImageInformation imageInformation;
     private VisionServiceClient client;
 
     @Override
@@ -103,42 +111,27 @@ public class AnalyzeUserImage extends Activity {
         protected void onPostExecute(AnalysisResult result) {
             super.onPostExecute(result);
 
-            System.out.println("Image format: " + result.metadata.format + "\n");
-            System.out.println("Image width: " + result.metadata.width + ", height:" + result.metadata.height + "\n");
-            System.out.println("Clip Art Type: " + result.imageType.clipArtType + "\n");
-            System.out.println("Line Drawing Type: " + result.imageType.lineDrawingType + "\n");
-            System.out.println("Is Adult Content:" + result.adult.isAdultContent + "\n");
-            System.out.println("Adult score:" + result.adult.adultScore + "\n");
-            System.out.println("Is Racy Content:" + result.adult.isRacyContent + "\n");
-            System.out.println("Racy score:" + result.adult.racyScore + "\n\n");
-
-            List<CustomCategory> customCategories = new ArrayList<>();
+            StringBuilder customCategories = new StringBuilder();
             for (Category category : result.categories) {
-                customCategories.add(new CustomCategory(category));
-                System.out.println("Category: " + category.name.toString() + ", score: " + category.score + "\n");
+                customCategories.append(category.name).append(COMMA);
+                System.out.println(CATEGORY + category.name + SCORE + category.score + "\n");
             }
             final Metadata metadata = result.metadata;
-            imageInformation = new ImageInformation(metadata.format, metadata.width, result.imageType.clipArtType,
-                    result.imageType.lineDrawingType, result.adult.isAdultContent, result.adult.adultScore,
-                    result.adult.isRacyContent, result.adult.racyScore, customCategories.toString(), result.faces.toString(), null);
 
-
+            StringBuilder faceInformation = new StringBuilder();
             int faceCount = 0;
             for (Face face : result.faces) {
                 faceCount++;
-                System.out.println("face " + faceCount + ", gender:" + face.gender + "(score: " + face.genderScore + "), age: " + +face.age + "\n");
-                System.out.println("    left: " + face.faceRectangle.left + ",  top: " + face.faceRectangle.top + ", width: " + face.faceRectangle.width + "  height: " + face.faceRectangle.height + "\n");
+                faceInformation.append(FACE).append(faceCount).append(COMMA).append(GENDER).append(face.gender).append(COMMA).
+                        append(SCORE).append(face.genderScore).append(COMMA).append(AGE).append(face.age).append(COMMA).append(LEFT).
+                        append(face.faceRectangle.left).append(COMMA).append(TOP).append(face.faceRectangle.top).append(COMMA)
+                        .append(WIDTH).append(face.faceRectangle.width).append(COMMA).append(HEIGHT).append(face.faceRectangle.height)
+                        .append(StandardSystemProperty.LINE_SEPARATOR);
             }
-            if (faceCount == 0) {
-                System.out.println("No face is detected");
-            }
-            System.out.println("\n");
 
-            System.out.println("\nDominant Color Foreground :" + result.color.dominantColorForeground + "\n");
-            System.out.println("Dominant Color Background :" + result.color.dominantColorBackground + "\n");
-
-            System.out.println("\n--- Raw Data ---\n\n");
-            System.out.println(imageInformation.toString());
+            imageInformation = new ImageInformation(metadata.format, metadata.width, result.imageType.clipArtType,
+                    result.imageType.lineDrawingType, result.adult.isAdultContent, result.adult.adultScore,
+                    result.adult.isRacyContent, result.adult.racyScore, customCategories.toString(), faceInformation.toString());
             asyncResponse.onPostTask(result);
         }
     }

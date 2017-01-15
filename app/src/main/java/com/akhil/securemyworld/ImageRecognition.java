@@ -44,6 +44,7 @@ public class ImageRecognition extends Activity implements View.OnClickListener {
     private static final String IMAGE = "image/*";
     private static final String SELECT_FILE_TEXT = "Select File";
     private static final String TAG = ImageRecognition.class.getSimpleName();
+    private static final String CAPTURED_IMAGE_PNG = "capturedImage.png";
     private MobileServiceClient mClient;
     private int REQUEST_CAMERA = 0, SELECT_FILE_CODE = 1;
     private ImageView imageView;
@@ -232,7 +233,7 @@ public class ImageRecognition extends Activity implements View.OnClickListener {
     private void startAnalysis() {
         Intent intent;
         intent = new Intent(this, AnalyzeUserImage.class);
-        String fileName = "capturedImage.png";
+        String fileName = CAPTURED_IMAGE_PNG;
         try {
             FileOutputStream fileOutputStream = this.openFileOutput(fileName, Context.MODE_PRIVATE);
             thumbnail = ((BitmapDrawable) imageView.getDrawable()).getBitmap();

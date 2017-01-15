@@ -32,11 +32,9 @@ public class ImageInformation implements Parcelable {
     private float imageRacyContentScore;
     private String category;
     private String face;
-    private String recognizeResults;
-
 
     public ImageInformation(String imageFormat, int imageWidth, int imageClipArtType, int imageLineDrawingType, boolean imageAdultContent, float imageAdultContentScore, boolean imageRacyContent,
-                            float imageRacyContentScore, String category, String face, String recognizeResults) {
+                            float imageRacyContentScore, String category, String face) {
         this.imageFormat = imageFormat;
         this.imageWidth = imageWidth;
         this.imageClipArtType = imageClipArtType;
@@ -47,7 +45,6 @@ public class ImageInformation implements Parcelable {
         this.imageRacyContentScore = imageRacyContentScore;
         this.category = category;
         this.face = face;
-        this.recognizeResults = recognizeResults;
     }
 
     protected ImageInformation(Parcel in) {
@@ -61,7 +58,6 @@ public class ImageInformation implements Parcelable {
         this.imageRacyContentScore = in.readFloat();
         this.category = in.readString();
         this.face = in.readString();
-        this.recognizeResults = in.readString();
     }
 
     public int getImageWidth() {
@@ -104,14 +100,6 @@ public class ImageInformation implements Parcelable {
         return face;
     }
 
-    public String getRecognizeResults() {
-        return recognizeResults.toString();
-    }
-
-    public void setRecognizeResults(String recognizeResults) {
-        this.recognizeResults = recognizeResults != null ? recognizeResults.toString() : recognizeResults;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public String toString() {
@@ -125,8 +113,7 @@ public class ImageInformation implements Parcelable {
                         System.lineSeparator() + " Image Racy Content : " + imageRacyContent +
                         System.lineSeparator() + " Image Racy Content Score : " + imageRacyContentScore +
                         System.lineSeparator() + " Category : " + category +
-                        System.lineSeparator() + " Face : " + face +
-                        System.lineSeparator() + "Recognize Results : " + recognizeResults;
+                        System.lineSeparator() + " Face : " + face;
     }
 
     @Override
@@ -146,6 +133,5 @@ public class ImageInformation implements Parcelable {
         dest.writeFloat(this.imageRacyContentScore);
         dest.writeString(this.category);
         dest.writeString(this.face);
-        dest.writeString(this.recognizeResults);
     }
 }

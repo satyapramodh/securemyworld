@@ -102,7 +102,6 @@ public class AnalyzeUserEmotion extends Activity {
 
         List<RecognizeResult> result = null;
         if (faceRectangles != null) {
-            imageInformation.setRecognizeResults(faceRectangles.toString());
             fileInputStream.reset();
 
             timeMark = System.currentTimeMillis();
@@ -153,21 +152,6 @@ public class AnalyzeUserEmotion extends Activity {
                 this.e = null;
             } else {
                 Integer count = 0;
-                imageInformation.setRecognizeResults(result.toString());
-                for (RecognizeResult r : result) {
-                    System.out.println(format("\nFace #%1$d \n", count));
-                    System.out.println(format("\t anger: %1$.5f\n", r.scores.anger));
-                    System.out.println(format("\t contempt: %1$.5f\n", r.scores.contempt));
-                    System.out.println(format("\t disgust: %1$.5f\n", r.scores.disgust));
-                    System.out.println(format("\t fear: %1$.5f\n", r.scores.fear));
-                    System.out.println(format("\t happiness: %1$.5f\n", r.scores.happiness));
-                    System.out.println(format("\t neutral: %1$.5f\n", r.scores.neutral));
-                    System.out.println(format("\t sadness: %1$.5f\n", r.scores.sadness));
-                    System.out.println(format("\t surprise: %1$.5f\n", r.scores.surprise));
-                    System.out.println(format("\t face rectangle: %d, %d, %d, %d", r.faceRectangle.left, r.faceRectangle.top, r.faceRectangle.width, r.faceRectangle.height));
-                    count++;
-                }
-                System.out.println("raw data :" + imageInformation.toString());
                 asyncResponse.onPostTask(result);
             }
         }
